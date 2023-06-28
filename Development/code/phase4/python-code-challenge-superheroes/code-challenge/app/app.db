@@ -1,0 +1,37 @@
+import os
+import sqlite3
+
+# Connect to the database (creates a new file if it doesn't exist)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+db_path = os.path.join(current_dir, 'app.db')
+conn = sqlite3.connect(db_path)
+
+# Create a cursor object to interact with the database
+cursor = conn.cursor()
+
+# Create a table
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT,
+        description TEXT,
+        completed INTEGER
+    )
+''')
+
+# Insert data into the table
+cursor.execute('''
+    INSERT INTO tasks (title, description, completed)
+    VALUES (?, ?, ?)
+''', ('Task 1', 'This is the first task', 0))
+
+cursor.execute('''
+    INSERT INTO tasks (title, description, completed)
+    VALUES (?, ?, ?)
+''', ('Task 2', 'This is the second task', 1))
+
+# Commit the changes and close the connection
+conn.commit()
+conn.close()
+
+
